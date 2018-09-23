@@ -4,13 +4,13 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const articles = require('./articles.json');
-const readAll.readAll = require('./readAll.js');
-const read.read = require('./read.js')
-const createArticle.createArticle = require('./createArticle.js');
-const updateArticle.updateArticle = require('./updateArticle.js');
-const deleteArticle.deleteArticle = require('./deleteArticle.js');
-const createComment.createComment = require('./createComment.js');
-const deleteComment.deleteComment = require('./deleteComment.js');
+const readAll = require('./readAll.js').readAll;
+const read = require('./read.js').read;
+const createArticle = require('./createArticle.js').createArticle;
+const updateArticle = require('./updateArticle.js').updateArticle;
+const deleteArticle = require('./deleteArticle.js').deleteArticle;
+const createComment = require('./createComment.js').createComment;
+const deleteComment = require('./deleteComment.js').deleteComment;
 
 const handlers = {
 	'/api/articles/readall': readAll,
