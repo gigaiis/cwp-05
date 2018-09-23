@@ -4,13 +4,13 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const articles = require('./articles.json');
-const readAll = require('./readAll.js');
-const read = require('./read.js')
-const createArticle = require('./createArticle.js');
-const updateArticle = require('./updateArticle.js');
-const deleteArticle = require('./deleteArticle.js');
-const createComment = require('./createComment.js');
-const deleteComment = require('./deleteComment.js');
+const readAll.readAll = require('./readAll.js');
+const read.read = require('./read.js')
+const createArticle.createArticle = require('./createArticle.js');
+const updateArticle.updateArticle = require('./updateArticle.js');
+const deleteArticle.deleteArticle = require('./deleteArticle.js');
+const createComment.createComment = require('./createComment.js');
+const deleteComment.deleteComment = require('./deleteComment.js');
 
 const handlers = {
 	'/api/articles/readall': readAll,
@@ -26,32 +26,23 @@ const server = http.createServer((req, res) => {
 	parseBodyJson(req, (err, payload) => {
 		const handler = getHandler(req.url);
 		handler(req, res, payload, (err, result) => {
-			if (err) {
-				res.statusCode = err.code;
-				res.setHeader('Content-Type', 'application/json');
-				res.end(JSON.stringify(err));
-				return;
-			}
-			fs.createWriteStream('articles.json').write(JSON.stringify(articles));
-			res.statusCode = 200;
 			res.setHeader('Content-Type', 'application/json');
-			res.end(JSON.stringify(result));
+			if (err) {
+				res.statusCode = err.code;			
+				res.end(JSON.stringify(err));
+			} else {
+				fs.createWriteStream('articles.json').write(JSON.stringify(articles));
+				res.statusCode = 200;
+				res.end(JSON.stringify(result));
+			}		
 		});
 	});
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+server.listen(port, hostname, () => console.log(`Server running at http://${hostname}:${port}/`));
 
-function getHandler(url) {
-	return handlers[url] || notFound;
-}
-
-function notFound(req, res, payload, cb) {
-	cb({ code: 404, message: 'Not found'});
-}
-
+function getHandler(url) { return handlers[url] || notFound; }
+function notFound(req, res, payload, cb) { cb({ code: 404, message: 'Not found'}); }
 function parseBodyJson(req, cb) {
 	let body = [];
 	req.on('data', (chunk) => {
